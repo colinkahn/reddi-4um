@@ -3,7 +3,7 @@ SECRET_KEY = 'SECRET_KEY'
 
 SESSION_SECRET = 'SESSION_SECRET'
 
-DOMAIN = 'http://localhost:5000'
+DOMAIN = os.getenv('DOMAIN', 'http://localhost:5000')
 
 DEBUG = True
 
