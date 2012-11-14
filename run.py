@@ -1,6 +1,7 @@
 import simplejson as json
 import time
 import bleach
+import os
 
 from httplib2 import Http
 from urllib import urlencode
@@ -165,5 +166,6 @@ def update_profile():
     return render_template('profile.html', user=user)
 
 
-if __name__ == "__main__":
-    app.run()
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
