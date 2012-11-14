@@ -7,6 +7,10 @@ DOMAIN = 'http://localhost:5000'
 
 DEBUG = True
 
+ALLOWED_TAGS = ['a', 'b', 'em', 'i', 'li', 'ol', 'strong', 'ul', 'br', 'h1', 'h2', 'u']
+
+TOPICS_PER_PAGE = 1
+
 import redis
 import os
 

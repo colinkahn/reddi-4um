@@ -1,0 +1,64 @@
+.topic-list .media {
+	margin:0;
+}
+
+.topic-list .media-body .badge {
+	font-size:inherit;
+	line-height: 36px;
+}
+
+.topic-list .media-body .badge a {
+	text-decoration: none;
+	color:white;
+}
+
+.topic-list .media-object {
+	height:60px;
+}
+
+.topic-title {
+	margin-bottom:1em;
+}
+
+.topic-title .avatar {
+	height:60px;
+	margin-top:-10px;
+}
+
+.comment {
+	margin-top:10px;
+	margin-bottom:10px;
+}
+
+.comment .one-liner {
+	display:none;
+}
+
+.comment.collapse {
+	margin-top:5px;
+	margin-bottom:5px;
+	height:20px;
+	opacity:.7;
+	padding:5px;
+	cursor:pointer;
+}
+
+.comment.collapse .one-liner {
+	display:inline;
+}
+
+.comment.collapse .content {
+	display:none;
+}
+.comment.collapse:hover {
+	opacity:1;
+}
+
+.comment.collapse .media-object {
+	width:20px;
+}
+
+.comment.collapse .comment-title {
+	margin:0;
+	display:inline;
+}
