@@ -75,11 +75,11 @@ class Topic(object, DateMixin):
 
     @property
     def comments(self):
-        ids = db.smembers('topic:%s:comments' % self.id)
-        return [Comment(id) for id in sorted(ids)]
+        ids = db.lrange('topic:%s:comments' % self.id, 0, -1)
+        return [Comment(id) for id in ids]
 
     def addComment(self, comment):
-        db.sadd('topic:%s:comments' % self.id, comment.id)
+        db.rpush('topic:%s:comments' % self.id, comment.id)
         db.set('comment:%s:topic' % comment.id, self.id)
 
     @property
