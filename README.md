@@ -14,12 +14,10 @@ Add a bunch of features to make this more like a 'real' forum
 * Ranking for comments (redis / ajax)
 * Ranking for topics (redis)
 * Paging for topics and comments
-* Tagging for Topics (mongo? redis?)
+* **(Check!)** Tagging for Topics (mongo? redis?)
 * Categories for Topics (redis)
 * Unread Message Tracking
-* msg-history -- When message are modified, everyone can see the change history. (Redis)
-
-
+* **(Check!)** msg-history -- When message are modified, everyone can see the change history. (Redis)
 
 [Django Forum Apps Comparison](https://code.djangoproject.com/wiki/ForumAppsComparison)
 

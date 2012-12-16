@@ -5,19 +5,7 @@
 	{% if session['user_email'] %}
 	<ul class="media-list topic-list">
 		{% for topic in topics %}
-		<li class="media">
-			<div class="pull-right">
-				<img class="media-object" src="{{ topic.user.email | gravatar }}">
-			</div>
-			<div class="media-body">
-				<h2>
-					<span class="badge"><a href="{{ url_for('view_topic', id=topic.raw_id) }}#newest">
-						{{topic.comments|length}}</a></span>
-					<a href="{{ url_for('view_topic', id=topic.id) }}">{{topic.title}}</a>
-					<small>by {{topic.user.username}}</small></h2>
-			</div>
-			<hr>
-		</li>
+			{% include "topic_item.html" %}
 		{% endfor %}
 	</ul>
 

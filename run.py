@@ -29,7 +29,7 @@ gravatar = Gravatar(app,
                     force_default=False,
                     force_lower=False)
 
-from models import User, Topic, Comment
+from models import User, Topic, Comment, Tag, all_tags
 
 currentUser = lambda: User.objects.with_id(session['user_id'])
 
@@ -91,12 +91,15 @@ def new_topic_form():
 def new_topic_submit():
     title = request.form['title']
     content = request.form['content']
+    tags = request.form['tags']
 
     if not title or not content:
-        return render_template('new_topic.html', title=title, content=content, topic_error=True)
+        return render_template('new_topic.html', title=title, content=content, tags=tags, topic_error=True)
     else:
         topic = Topic(title=title, content=content, user=currentUser())
         topic.save()
+        # Post-save add our tags
+        topic.save_tags(tags.split(','))
 
         return redirect(url_for('view_topic', id=topic.id))
 
@@ -118,11 +121,13 @@ def edit_topic_submit(pk):
     topic = Topic.objects.with_id(pk)
     topic.title = request.form['title']
     topic.content = request.form['content']
+    tags = request.form['tags']
 
     if not topic.title or not topic.content:
-        return render_template('edit_topic.html', title=topic.title, content=topic.content, topic_error=True)
+        return render_template('edit_topic.html', title=topic.title, content=topic.content, tags=tags, topic_error=True)
     else:
         topic.save()
+        topic.save_tags(tags.split(','))
 
         return redirect(url_for('view_topic', id=topic.id))
 
@@ -154,6 +159,19 @@ def comment_on_topic(id):
         topic.comments.append(comment)
         topic.save()
         return redirect(url_for('view_topic', id=topic.id))
+
+
+@app.route("/tags/")
+@authenticated
+def view_tags():
+    return render_template('tags.html', tags=all_tags())
+
+
+@app.route("/tags/<name>")
+@authenticated
+def view_single_tag(name):
+    tag = Tag(name).load()
+    return render_template('single_tag.html', tag=tag)
 
 
 @app.route("/profile/")

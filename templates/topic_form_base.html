@@ -14,6 +14,9 @@
 	    <input type="text" placeholder="My post title" name="title" class="span12" value="{% block topic_title %}{{title}}{% endblock %}">
 		<label>Content</label>
 		<textarea rows="20" name="content" class="span12 textarea">{% block topic_content %}{{content}}{% endblock %}</textarea>
+		<label>Tags</label>
+	    <input type="text" name="tags" class="span12" value="{% block topic_tags %}{{tags|sort|join(', ')}}{% endblock %}">
+	    <span class="help-block">Comma separated list of tags</span>
 		<div class="form-actions">
 			<button type="submit" class="btn btn-primary">Submit</button>
 			{% block extra_form_actions %}{% endblock %}
