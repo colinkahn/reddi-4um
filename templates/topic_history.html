@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="topic-title">
+	<img class="avatar pull-right" src="{{ topic.user.email | gravatar }}">
+	History for <a href="{{ url_for('view_topic', id=topic.raw_id) }}">{{topic.title}}</a>
+	<small>by {{topic.user.username}}</small>
+</h1>
+
+{% if topic.history_count %}
+	{% for version in topic.history %}
+		<h2>{{version.date|date}}</h2>
+		<div class="well">
+			{{version.content|safe}}
+		</div>
+	{% endfor %}
+{% else %}
+	<h3>No revisions found</h3>
+{% endif %}
+
+{% endblock %}

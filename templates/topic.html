@@ -5,20 +5,37 @@
 <h1 class="topic-title">
 	<img class="avatar pull-right" src="{{ topic.user.email | gravatar }}">
 	{{topic.title}}
-	<small>by {{topic.user.name}}</small>
+	<small>by {{topic.user.username}}</small>
+
+	{% if session['user_email'] == topic.user.email %}
+		<a class="btn" href="{{ url_for('edit_topic_form', pk=topic.raw_id) }}"><i class="icon icon-edit"></i> Edit</a>
+	{% endif %}
+
 </h1>
 {{topic.content|safe}}
+
+<dl class="dl-horizontal">
+	<dt>Created</dt>
+		<dd>{{topic.created_at|date}}</dd>
+	<dt>Updated</dt>
+		<dd>{{topic.updated_at|date}}</dd>
+	<dt>Revisions</dt>
+		<dd>
+			<span class="label">{{topic.history_count}}</span>
+			<a href="{{ url_for('view_topic_history', pk=topic.raw_id) }}" class="btn btn-small"><i class="icon icon-eye-open"></i> History</a>
+		</dd>
+</dl>
 
 <hr>
 
 <ul class="media-list">
-	{% for comment in comments %}
+	{% for comment in topic.comments %}
 	<li class="media well well-small comment" id="{% if loop.last %}newest{% endif %}">
 		<div class="pull-left">
 			<img class="media-object" src="{{ comment.user.email | gravatar }}">
 		</div>
 		<div class="media-body">
-			<h6 class="comment-title">{{comment.user.name}}:</h6>
+			<h6 class="comment-title">{{comment.user.username}} <small>{{comment.created_at|date}}</small></h6>
 			<span class="one-liner">{{comment.content|striptags|truncate(100)}}</span>
 			<div class="content">{{comment.content|safe}}</div>
 		</div>

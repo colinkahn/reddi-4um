@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form method="post" action="">
+	<fieldset>
+		<legend>{% block action %}New{% endblock %} Topic</legend>
+		{% if topic_error %}
+		<div class="alert alert-error">
+			<strong>Derp!</strong> Make sure title and content are filled out.
+		</div>
+		{% endif %}
+		<label>Title</label>
+	    <input type="text" placeholder="My post title" name="title" class="span12" value="{% block topic_title %}{{title}}{% endblock %}">
+		<label>Content</label>
+		<textarea rows="20" name="content" class="span12 textarea">{% block topic_content %}{{content}}{% endblock %}</textarea>
+		<div class="form-actions">
+			<button type="submit" class="btn btn-primary">Submit</button>
+			{% block extra_form_actions %}{% endblock %}
+		</div>
+	</fieldset>
+</form>
+
+{% endblock %}

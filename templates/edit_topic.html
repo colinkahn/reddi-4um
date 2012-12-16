@@ -1,0 +1,8 @@
+{% extends "topic_form_base.html" %}
+
+{% block action %}Edit{% endblock %}
+{% block topic_title %}{{topic.title}}{% endblock %}
+{% block topic_content %}{{topic.content}}{% endblock %}
+{% block extra_form_actions %}
+	<a href="{{ url_for('view_topic', id=topic.raw_id) }}" class="btn">Cancel</a>
+{% endblock %}

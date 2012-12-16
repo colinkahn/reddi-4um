@@ -1,7 +1,8 @@
 import simplejson as json
-import time
 import bleach
 import os
+import browserid
+import datetime
 
 from httplib2 import Http
 from urllib import urlencode
@@ -28,12 +29,9 @@ gravatar = Gravatar(app,
                     force_default=False,
                     force_lower=False)
 
-from forum import Forum, Topic, Comment, User
+from models import User, Topic, Comment
 
-f = Forum()
-
-currentUser = lambda: User(session['user_id'])
-
+currentUser = lambda: User.objects.with_id(session['user_id'])
 
 @app.template_filter('date')
 def datetimeformat(value, format='%H:%M / %d-%m-%Y'):
@@ -41,9 +39,9 @@ def datetimeformat(value, format='%H:%M / %d-%m-%Y'):
 
 @app.route("/")
 def main():
-    pager = f.getTopicsPager()
-    topics = f.getTopicsByModified(pager['page'], settings.TOPICS_PER_PAGE)
-    return render_template('index.html', topics=topics, pager=pager)
+    #pager = f.getTopicsPager()
+    topics = Topic.objects.all()
+    return render_template('index.html', topics=topics)
 
 
 @app.route('/set_email', methods=['POST'])
@@ -52,17 +50,12 @@ def set_email():
     the email for the user unless it already
     exists and return the token.
     """
-    bid_fields = {'assertion':request.form['bid_assertion'],
-                  'audience':settings.DOMAIN}
-    headers = {'Content-type':'application/x-www-form-urlencoded'}
-    h.disable_ssl_certificate_validation=True
-    resp, content = h.request('https://browserid.org/verify',
-                              'POST',
-                              body=urlencode(bid_fields),
-                              headers=headers)
-    bid_data = json.loads(content)
+    bid_data = browserid.verify(request.form['bid_assertion'])
+
     if bid_data['status'] == 'okay' and bid_data['email']:
-        user = f.userFromBidOrNew(bid_data['email'])
+        user, created = User.objects.get_or_create(email=bid_data['email'])
+        created and user.save()
+
         session['user_id'] = user.id
         session['user_email'] = user.email
 
@@ -102,52 +95,64 @@ def new_topic_submit():
     if not title or not content:
         return render_template('new_topic.html', title=title, content=content, topic_error=True)
     else:
-        # Get a new topic object
-        topic = f.newTopic()
-        # Set its title and content
-        topic.title = title
-        topic.content = content
-        # Set it as just modified
-        f.setTopicAsModified(topic)
-        # Get the current user
-        user = currentUser()
-        # Add the topic to that users topics
-        user.addTopic(topic)
+        topic = Topic(title=title, content=content, user=currentUser())
+        topic.save()
 
         return redirect(url_for('view_topic', id=topic.id))
 
 
-@app.route("/topic/<int:id>/")
+@app.route("/topic/<pk>/edit/")
+@authenticated
+def edit_topic_form(pk):
+    topic = Topic.objects.with_id(pk)
+
+    if topic.user != currentUser():
+        pass #Unauthorized...
+
+    return render_template('edit_topic.html', topic=topic)
+
+
+@app.route("/topic/<pk>/edit/", methods=['POST'])
+@authenticated
+def edit_topic_submit(pk):
+    topic = Topic.objects.with_id(pk)
+    topic.title = request.form['title']
+    topic.content = request.form['content']
+
+    if not topic.title or not topic.content:
+        return render_template('edit_topic.html', title=topic.title, content=topic.content, topic_error=True)
+    else:
+        topic.save()
+
+        return redirect(url_for('view_topic', id=topic.id))
+
+
+@app.route("/topic/<id>/")
 @authenticated
 def view_topic(id):
-    topic = Topic(id)
-    comments = topic.comments
-    return render_template('topic.html', topic=topic, comments=comments)
+    topic = Topic.objects.with_id(id)
+    return render_template('topic.html', topic=topic)
 
 
-@app.route("/topic/<int:id>/", methods=['POST'])
+@app.route("/topic/<pk>/history")
+@authenticated
+def view_topic_history(pk):
+    topic = Topic.objects.with_id(pk)
+    return render_template('topic_history.html', topic=topic)
+
+
+@app.route("/topic/<id>/", methods=['POST'])
 @authenticated
 def comment_on_topic(id):
-    topic = Topic(id)
+    topic = Topic.objects.with_id(id)
     content = request.form['content']
 
     if not content:
-        comments = topic.comments
-        return render_template('topic.html', topic=topic, comments=comments, comment_error=True)
+        return render_template('topic.html', topic=topic, comment_error=True)
     else:
-        # Get a new comment object
-        comment = f.newComment()
-        # Set it's content
-        comment.content = content
-        # Add the comment to this topic
-        topic.addComment(comment)
-        # Set topic as just modified
-        f.setTopicAsModified(topic)
-        # Get the current user
-        user = currentUser()
-        # Add the comment to that users comments
-        user.addComment(comment)
-
+        comment = Comment(content=content, user=currentUser())
+        topic.comments.append(comment)
+        topic.save()
         return redirect(url_for('view_topic', id=topic.id))
 
 
@@ -163,6 +168,7 @@ def edit_profile():
 def update_profile():
     user = currentUser()
     user.name = request.form['username']
+    user.save()
     return render_template('profile.html', user=user)
 
 

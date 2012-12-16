@@ -6,3 +6,49 @@ A simple forum written with Flask using Redis.
 ### Example
 
 A working version hosted up on Heroku [here](http://reddi-4um.herokuapp.com/).
+
+### ToDo
+
+Add a bunch of features to make this more like a 'real' forum
+
+* Ranking for comments (redis / ajax)
+* Ranking for topics (redis)
+* Paging for topics and comments
+* Tagging for Topics (mongo? redis?)
+* Categories for Topics (redis)
+* Unread Message Tracking
+* msg-history -- When message are modified, everyone can see the change history. (Redis)
+
+
+
+[Django Forum Apps Comparison](https://code.djangoproject.com/wiki/ForumAppsComparison)
+
+
+### Tagging
+
+#### In Redis
+
+	\# set of all tags
+	db.zadd('Forum:Tags', tag, #of)
+	\# set of tags for each topic
+	db.sadd('Forum:Topic:%s' % pk, tag)
+
+##### Advantages
+
+* Sets! score == popularity
+
+#### In Mongo
+
+	\# as a ListField
+	tags = ListField(StringField(max_length=30))
+	\# added directly to a topic
+	topic.append(tag)
+
+##### Advantages
+
+* Simplicity! Add directly to a model
+
+
+### Message History
+
+	db.zadd('Forum:History:Topic:<id>', <content>, <timestamp> (or) <version>)
