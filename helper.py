@@ -23,10 +23,3 @@ def clean(f):
         r = f(*args, **kwargs)
         return bleach.clean(r, tags=settings.ALLOWED_TAGS)
     return decorated
-
-def get_page(max):
-    page = int(request.args.get('page', default=1))
-    if page > max:
-        return max
-    else:
-        return page < 1 and 1 or page

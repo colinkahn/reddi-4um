@@ -29,9 +29,12 @@ class Tag(object):
         self.topic_ids = redisDB.smembers('Forum:Tag:%s:Topics' % self.name)
         return self
 
-    @property
+    def topic_count(self):
+        return redisDB.scard('Forum:Tag:%s:Topics' % self.name)
+
     def topics(self):
         return Topic.objects.filter(pk__in=[pk for pk in self.topic_ids if pk])
+
 
 
 def all_tags():

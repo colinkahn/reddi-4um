@@ -12,7 +12,7 @@ DEBUG = True
 
 ALLOWED_TAGS = ['a', 'b', 'em', 'i', 'li', 'ol', 'strong', 'ul', 'br', 'h1', 'h2', 'u']
 
-TOPICS_PER_PAGE = 1
+PER_PAGE = 6
 
 REDIS_URL = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
 DATABASE = redis.from_url(REDIS_URL)

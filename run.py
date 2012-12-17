@@ -12,7 +12,7 @@ import settings
 from helper import *
 
 from flask import (Flask, jsonify, redirect,
-                   render_template, request, session, url_for)
+                   render_template, request, session, url_for, abort)
 
 from flask.ext.gravatar import Gravatar
 
@@ -30,16 +30,40 @@ gravatar = Gravatar(app,
                     force_lower=False)
 
 from models import User, Topic, Comment, Tag, all_tags, currentUser
+from pagination import Pagination
+
+
+### Template Stuff ###
 
 @app.template_filter('date')
 def datetimeformat(value, format='%H:%M / %d-%m-%Y'):
     return value.strftime(format)
 
-@app.route("/")
-def main():
-    #pager = f.getTopicsPager()
-    topics = Topic.objects.all()
-    return render_template('index.html', topics=topics)
+def url_for_other_page(page):
+    args = request.view_args.copy()
+    args['page'] = page
+    return url_for(request.endpoint, **args)
+
+app.jinja_env.globals['url_for_other_page'] = url_for_other_page
+
+
+### Our Routes ###
+
+def page_start_end(page):
+    start = settings.PER_PAGE * (page-1)
+    end = start + settings.PER_PAGE
+    return (start,end)
+
+@app.route("/", defaults={'page':1})
+@app.route("/page/<int:page>")
+def main(page):
+    count = Topic.objects.count()
+    start,end = page_start_end(page)
+    topics = Topic.objects[start:end]
+    if not topics and page != 1:
+        abort(404)
+    pagination = Pagination(page, settings.PER_PAGE, count)
+    return render_template('index.html', topics=topics, pagination=pagination)
 
 
 @app.route('/set_email', methods=['POST'])
@@ -108,7 +132,7 @@ def edit_topic_form(pk):
     topic = Topic.objects.with_id(pk)
 
     if topic.user != currentUser():
-        pass #Unauthorized...
+        abort(401)
 
     return render_template('edit_topic.html', topic=topic)
 
@@ -117,6 +141,10 @@ def edit_topic_form(pk):
 @authenticated
 def edit_topic_submit(pk):
     topic = Topic.objects.with_id(pk)
+
+    if topic.user != currentUser():
+        abort(401)
+
     topic.title = request.form['title']
     topic.content = request.form['content']
     tags = request.form['tags']
@@ -127,7 +155,7 @@ def edit_topic_submit(pk):
         topic.save()
         topic.save_tags(tags.split(','))
 
-        return redirect(url_for('view_topic', id=topic.id))
+        return redirect(url_for('view_topic', pk=topic.id))
 
 
 @app.route("/topic/<pk>/")
@@ -167,11 +195,18 @@ def view_tags():
     return render_template('tags.html', tags=all_tags())
 
 
-@app.route("/tags/<name>")
+@app.route("/tags/<name>", defaults={'page':1})
+@app.route("/tags/<name>/page/<int:page>")
 @authenticated
-def view_single_tag(name):
+def view_single_tag(name, page):
     tag = Tag(name).load()
-    return render_template('single_tag.html', tag=tag)
+    count = tag.topic_count()
+    start,end = page_start_end(page)
+    topics = tag.topics()[start:end]
+    if not topics and page != 1:
+        abort(404)
+    pagination = Pagination(page, settings.PER_PAGE, count)
+    return render_template('single_tag.html', tag=tag, topics=topics, pagination=pagination)
 
 
 @app.route("/profile/")

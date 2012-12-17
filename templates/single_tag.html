@@ -6,8 +6,12 @@
 </div>
 
 <ul class="media-list topic-list">
-	{% for topic in tag.topics %}
+	{% for topic in topics %}
 		{% include "topic_item.html" %}
 	{% endfor %}
 </ul>
+
+{% from '_helpers.html' import render_pagination with context %}
+{{render_pagination(pagination)}}
+
 {% endblock %}

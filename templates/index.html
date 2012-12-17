@@ -9,6 +9,9 @@
 		{% endfor %}
 	</ul>
 
+	{% from '_helpers.html' import render_pagination with context %}
+	{{render_pagination(pagination)}}
+
 	{% else %}
 	<h2>Please sign in to use the forum</h2>
 	{% endif %}
