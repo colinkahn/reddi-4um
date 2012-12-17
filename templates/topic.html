@@ -19,7 +19,7 @@
 		<dd>
 			{% for tag in topic.tag_objects %}
 				<span class="label tag">
-					<a href="{{ url_for('view_single_tag', name=tag.name) }}">{{tag.name}}</a></span>
+					<a href="{{ url_for('view_topics_with_tags', tags=tag.name) }}">{{tag.name}}</a></span>
 			{% endfor %}
 		</dd>
 	<dt>Created</dt>

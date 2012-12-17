@@ -7,7 +7,7 @@
 <dl class="dl-horizontal">
 	{% for tag in tags %}
 	<dt>{{tag.topic_ids|length}}</dt>
-		<dd><span class="label tag"><a href="{{ url_for('view_single_tag', name=tag.name) }}">{{tag.name}}</a></span></dd>
+		<dd><span class="label tag"><a href="{{ url_for('view_topics_with_tags', tags=tag.name) }}">{{tag.name}}</a></span></dd>
 	{% endfor %}
 <dl>
 {% endblock %}

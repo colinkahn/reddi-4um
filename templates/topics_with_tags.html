@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+	<h1>Topics Tagged with {% for tag in tags %}<span class="label tag">{{tag.name}}</span> {% endfor %}</h1>
+</div>
+
+<ul class="media-list topic-list">
+	{% for topic in topics %}
+		{% include "topic_item.html" %}
+	{% endfor %}
+</ul>
+
+{% from '_helpers.html' import render_pagination with context %}
+{{render_pagination(pagination)}}
+
+{% endblock %}

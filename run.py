@@ -186,7 +186,7 @@ def comment_on_topic(id):
         comment = Comment(content=content, user=currentUser())
         topic.comments.append(comment)
         topic.save()
-        return redirect(url_for('view_topic', id=topic.id))
+        return redirect(url_for('view_topic', pk=topic.raw_id))
 
 
 @app.route("/tags/")
@@ -195,18 +195,21 @@ def view_tags():
     return render_template('tags.html', tags=all_tags())
 
 
-@app.route("/tags/<name>", defaults={'page':1})
-@app.route("/tags/<name>/page/<int:page>")
+@app.route("/tags/<tags>", defaults={'page':1})
+@app.route("/tags/<tags>/page/<int:page>")
 @authenticated
-def view_single_tag(name, page):
-    tag = Tag(name).load()
-    count = tag.topic_count()
+def view_topics_with_tags(tags, page):
+    tags = [Tag(tag).load() for tag in tags.split('+') if tag]
+    tag_keys = ['Forum:Tag:%s:Topics' % tag.name for tag in tags]
+    topic_ids = settings.DATABASE.sinter(tag_keys)
+    count = len(topic_ids)
     start,end = page_start_end(page)
-    topics = tag.topics()[start:end]
+    topics = Topic.objects.filter(pk__in=topic_ids)[start:end]
     if not topics and page != 1:
         abort(404)
     pagination = Pagination(page, settings.PER_PAGE, count)
-    return render_template('single_tag.html', tag=tag, topics=topics, pagination=pagination)
+    return render_template('topics_with_tags.html', tags=tags, topics=topics, pagination=pagination)
+
 
 
 @app.route("/profile/")
