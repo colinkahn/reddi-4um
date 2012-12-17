@@ -29,9 +29,7 @@ gravatar = Gravatar(app,
                     force_default=False,
                     force_lower=False)
 
-from models import User, Topic, Comment, Tag, all_tags
-
-currentUser = lambda: User.objects.with_id(session['user_id'])
+from models import User, Topic, Comment, Tag, all_tags, currentUser
 
 @app.template_filter('date')
 def datetimeformat(value, format='%H:%M / %d-%m-%Y'):
@@ -101,7 +99,7 @@ def new_topic_submit():
         # Post-save add our tags
         topic.save_tags(tags.split(','))
 
-        return redirect(url_for('view_topic', id=topic.id))
+        return redirect(url_for('view_topic', pk=topic.raw_id))
 
 
 @app.route("/topic/<pk>/edit/")
@@ -132,10 +130,12 @@ def edit_topic_submit(pk):
         return redirect(url_for('view_topic', id=topic.id))
 
 
-@app.route("/topic/<id>/")
+@app.route("/topic/<pk>/")
 @authenticated
-def view_topic(id):
-    topic = Topic.objects.with_id(id)
+def view_topic(pk):
+    topic = Topic.objects.with_id(pk)
+    user = currentUser()
+    user.readTopic(topic)
     return render_template('topic.html', topic=topic)
 
 

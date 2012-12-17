@@ -1,12 +1,12 @@
-<li class="media">
+<li class="topic-item media {% if topic.unread %}unread{% endif %}">
 	<div class="pull-right">
 		<img class="media-object" src="{{ topic.user.email | gravatar }}">
 	</div>
 	<div class="media-body">
 		<h2>
-			<span class="badge"><a href="{{ url_for('view_topic', id=topic.raw_id) }}#newest">
+			<span class="badge"><a href="{{ url_for('view_topic', pk=topic.raw_id) }}#newest">
 				{{topic.comments|length}}</a></span>
-			<a href="{{ url_for('view_topic', id=topic.id) }}">{{topic.title}}</a>
+			<a href="{{ url_for('view_topic', pk=topic.raw_id) }}">{{topic.title}}</a>
 			<small>by {{topic.user.username}}</small></h2>
 	</div>
 	<hr>

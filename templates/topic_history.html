@@ -4,7 +4,7 @@
 
 <h1 class="topic-title">
 	<img class="avatar pull-right" src="{{ topic.user.email | gravatar }}">
-	History for <a href="{{ url_for('view_topic', id=topic.raw_id) }}">{{topic.title}}</a>
+	History for <a href="{{ url_for('view_topic', pk=topic.raw_id) }}">{{topic.title}}</a>
 	<small>by {{topic.user.username}}</small>
 </h1>
 

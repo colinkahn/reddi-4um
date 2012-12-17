@@ -16,7 +16,7 @@ Add a bunch of features to make this more like a 'real' forum
 * Paging for topics and comments
 * **(Check!)** Tagging for Topics (mongo? redis?)
 * Categories for Topics (redis)
-* Unread Message Tracking
+* **(Check!)** Unread Message Tracking
 * **(Check!)** msg-history -- When message are modified, everyone can see the change history. (Redis)
 
 [Django Forum Apps Comparison](https://code.djangoproject.com/wiki/ForumAppsComparison)
@@ -50,3 +50,9 @@ Add a bunch of features to make this more like a 'real' forum
 ### Message History
 
 	db.zadd('Forum:History:Topic:<id>', <content>, <timestamp> (or) <version>)
+
+
+### Unread Message Tracking ###
+
+* Each user has an unread message queue (redis list of post ids)
+* When a user goes to a page that post is removed from the queue

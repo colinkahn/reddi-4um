@@ -4,6 +4,7 @@ from mongoengine import *
 from mongoengine import signals
 from settings import DATABASE as redisDB
 from diff_match_patch import diff_match_patch
+from flask import session
 
 connect('forum')
 
@@ -12,6 +13,7 @@ connect('forum')
 to_timestamp = lambda dt: calendar.timegm(dt.utctimetuple())
 from_timestamp = lambda ts: datetime.datetime.fromtimestamp(float(ts))
 
+currentUser = lambda: User.objects.with_id(session['user_id'])
 
 class Version(object):
     def __init__(self, content,timestamp):
@@ -75,6 +77,12 @@ class User(Document, RawIdMixin):
     @property
     def username(self):
         return self.name or 'anon'
+
+    def storeInRedis(self):
+        redisDB.sadd('Forum:Users:All', self.raw_id)
+
+    def readTopic(self, topic):
+        redisDB.sadd('Forum:User:%s:HasRead' % self.raw_id, topic.raw_id)
 
 
 class Comment(EmbeddedDocument, RawIdMixin):
@@ -164,8 +172,28 @@ class Topic(Document, RawIdMixin):
     def tag_objects(self):
         return [Tag(name).load() for name in self.tags]
 
+    def add_to_unread_queues(self):
+        '''
+        Add this Topic to each users unread queue
+        '''
+        users = redisDB.smembers('Forum:Users:All')
+        [redisDB.srem('Forum:User:%s:HasRead' % pk, self.raw_id) for pk in users]
+
+    @property
+    def unread(self):
+        '''
+        Returns True if the current user hasn't read this Topic
+        '''
+        user = currentUser()
+        return not redisDB.sismember('Forum:User:%s:HasRead' % user.raw_id, self.raw_id)
+
 
 ### Signals ###
+
+def redis_updates_for_user(sender, document, **kwargs):
+    document.storeInRedis()
+
+signals.post_save.connect(redis_updates_for_user, sender=User)
 
 def update_updated_at(sender, document, **kwargs):
     document.updated_at = datetime.datetime.now()
@@ -174,5 +202,6 @@ signals.pre_save.connect(update_updated_at, sender=Topic)
 
 def redis_updates_for_topic(sender, document, **kwargs):
     document.update_history()
+    document.add_to_unread_queues()
 
 signals.post_save.connect(redis_updates_for_topic, sender=Topic)

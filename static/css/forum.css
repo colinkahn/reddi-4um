@@ -73,3 +73,7 @@ h1 .label.tag {
 	line-height:1.5em;
 	padding:0 .5ex;
 }
+
+.topic-item.unread .media-body {
+	background:#dff0d8;
+}
