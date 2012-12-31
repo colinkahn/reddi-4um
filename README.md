@@ -56,3 +56,12 @@ Add a bunch of features to make this more like a 'real' forum
 
 * Each user has an unread message queue (redis list of post ids)
 * When a user goes to a page that post is removed from the queue
+
+
+---
+
+Store all topics in Redis in sorted set using timestamp updated for ranking
+
+for gettings pagination / tags 
+
+get intersection for tags returning topic ids then get those ids from the total sorted set of topics
