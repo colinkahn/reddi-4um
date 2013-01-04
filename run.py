@@ -158,13 +158,26 @@ def edit_topic_submit(pk):
         return redirect(url_for('view_topic', pk=topic.id))
 
 
-@app.route("/topic/<pk>/")
+@app.route("/topic/<pk>/", defaults={'page':1})
+@app.route("/topic/<pk>/<int:page>")
 @authenticated
-def view_topic(pk):
+def view_topic(pk,page):
     topic = Topic.objects.with_id(pk)
+    # Mark the topic as read
+    # by the current user
     user = currentUser()
     user.readTopic(topic)
-    return render_template('topic.html', topic=topic)
+
+    # Get our comments
+    count = len(topic.comments)
+    start, end = page_start_end(page)
+    comments = topic.comments[start:end]
+
+    if not comments and page != 1:
+        abort(404)
+
+    pagination = Pagination(page, settings.PER_PAGE, count)
+    return render_template('topic.html', topic=topic, comments=comments, pagination=pagination)
 
 
 @app.route("/topic/<pk>/history")
@@ -174,9 +187,10 @@ def view_topic_history(pk):
     return render_template('topic_history.html', topic=topic)
 
 
-@app.route("/topic/<id>/", methods=['POST'])
+@app.route("/topic/<id>/", methods=['POST'], defaults={'page':1})
+@app.route("/topic/<id>/<int:page>", methods=['POST'])
 @authenticated
-def comment_on_topic(id):
+def comment_on_topic(id,page):
     topic = Topic.objects.with_id(id)
     content = request.form['content']
 
@@ -186,7 +200,7 @@ def comment_on_topic(id):
         comment = Comment(content=content, user=currentUser())
         topic.comments.append(comment)
         topic.save()
-        return redirect(url_for('view_topic', pk=topic.raw_id))
+        return redirect(url_for('view_topic', page=page, pk=topic.raw_id))
 
 
 @app.route("/tags/")

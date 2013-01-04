@@ -13,7 +13,7 @@ Add a bunch of features to make this more like a 'real' forum
 
 * Ranking for comments (redis / ajax)
 * Ranking for topics (redis)
-* Paging for topics and comments
+* **(Check!)** Paging for topics and comments
 * **(Check!)** Tagging for Topics (mongo? redis?)
 * Categories for Topics (redis)
 * **(Check!)** Unread Message Tracking

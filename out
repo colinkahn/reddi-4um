@@ -1,0 +1,82 @@
+04:56:08 web.1   | started with pid 20276
+04:56:08 redis.1 | started with pid 20279
+04:56:08 mongo.1 | started with pid 20282
+04:56:08 redis.1 | [20281] 04 Jan 04:56:08.926 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+04:56:08 redis.1 | [20281] 04 Jan 04:56:08.927 * Max number of open files set to 10032
+04:56:08 redis.1 | [20281] 04 Jan 04:56:08.927 # Warning: 32 bit instance detected but no memory limit set. Setting 3 GB maxmemory limit with 'noeviction' policy now.
+04:56:08 redis.1 |                 _._                                                  
+04:56:08 redis.1 |            _.-``__ ''-._                                             
+04:56:08 redis.1 |       _.-``    `.  `_.  ''-._           Redis 2.6.7 (00000000/0) 32 bit
+04:56:08 redis.1 |   .-`` .-```.  ```\/    _.,_ ''-._                                   
+04:56:08 redis.1 |  (    '      ,       .-`  | `,    )     Running in stand alone mode
+04:56:08 redis.1 |  |`-._`-...-` __...-.``-._|'` _.-'|     Port: 6379
+04:56:08 redis.1 |  |    `-._   `._    /     _.-'    |     PID: 20281
+04:56:08 redis.1 |   `-._    `-._  `-./  _.-'    _.-'                                   
+04:56:08 redis.1 |  |`-._`-._    `-.__.-'    _.-'_.-'|                                  
+04:56:08 redis.1 |  |    `-._`-._        _.-'_.-'    |           http://redis.io        
+04:56:08 redis.1 |   `-._    `-._`-.__.-'_.-'    _.-'                                   
+04:56:08 redis.1 |  |`-._`-._    `-.__.-'    _.-'_.-'|                                  
+04:56:08 redis.1 |  |    `-._`-._        _.-'_.-'    |                                  
+04:56:08 redis.1 |   `-._    `-._`-.__.-'_.-'    _.-'                                   
+04:56:08 redis.1 |       `-._    `-.__.-'    _.-'                                       
+04:56:08 redis.1 |           `-._        _.-'                                           
+04:56:08 redis.1 |               `-.__.-'                                               
+04:56:08 redis.1 | [20281] 04 Jan 04:56:08.927 # Server started, Redis version 2.6.7
+04:56:08 redis.1 | [20281] 04 Jan 04:56:08.927 # WARNING overcommit_memory is set to 0! Background save may fail under low memory condition. To fix this issue add 'vm.overcommit_memory = 1' to /etc/sysctl.conf and then reboot or run the command 'sysctl vm.overcommit_memory=1' for this to take effect.
+04:56:08 redis.1 | [20281] 04 Jan 04:56:08.928 * DB loaded from disk: 0.000 seconds
+04:56:08 redis.1 | [20281] 04 Jan 04:56:08.928 * The server is now ready to accept connections on port 6379
+04:56:08 mongo.1 | Fri Jan  4 04:56:08 
+04:56:08 mongo.1 | Fri Jan  4 04:56:08 warning: 32-bit servers don't have journaling enabled by default. Please use --journal if you want durability.
+04:56:08 mongo.1 | Fri Jan  4 04:56:08 
+04:56:08 mongo.1 | Fri Jan  4 04:56:08 [initandlisten] MongoDB starting : pid=20285 port=27017 dbpath=/var/lib/mongodb 32-bit host=zomg
+04:56:08 mongo.1 | Fri Jan  4 04:56:08 [initandlisten] 
+04:56:08 mongo.1 | Fri Jan  4 04:56:08 [initandlisten] ** NOTE: when using MongoDB 32 bit, you are limited to about 2 gigabytes of data
+04:56:08 mongo.1 | Fri Jan  4 04:56:08 [initandlisten] **       see http://blog.mongodb.org/post/137788967/32-bit-limitations
+04:56:08 mongo.1 | Fri Jan  4 04:56:08 [initandlisten] **       with --journal, the limit is lower
+04:56:08 mongo.1 | Fri Jan  4 04:56:08 [initandlisten] 
+04:56:08 mongo.1 | Fri Jan  4 04:56:08 [initandlisten] db version v2.2.2, pdfile version 4.5
+04:56:08 mongo.1 | Fri Jan  4 04:56:08 [initandlisten] git version: d1b43b61a5308c4ad0679d34b262c5af9d664267
+04:56:08 mongo.1 | Fri Jan  4 04:56:08 [initandlisten] build info: Linux domU-12-31-39-01-70-B4 2.6.21.7-2.fc8xen #1 SMP Fri Feb 15 12:39:36 EST 2008 i686 BOOST_LIB_VERSION=1_49
+04:56:08 mongo.1 | Fri Jan  4 04:56:08 [initandlisten] options: { dbpath: "/var/lib/mongodb" }
+04:56:08 mongo.1 | Fri Jan  4 04:56:08 [initandlisten] Unable to check for journal files due to: boost::filesystem::basic_directory_iterator constructor: No such file or directory: "/var/lib/mongodb/journal"
+04:56:09 mongo.1 | Fri Jan  4 04:56:09 [websvr] admin web console waiting for connections on port 28017
+04:56:09 mongo.1 | Fri Jan  4 04:56:09 [initandlisten] waiting for connections on port 27017
+04:56:09 web.1   | /home/colin/code/reddi-4um/helper.py:2: DeprecationWarning: the md5 module is deprecated; use hashlib instead
+04:56:09 web.1   |   import md5
+04:56:09 mongo.1 | Fri Jan  4 04:56:09 [initandlisten] connection accepted from 127.0.0.1:50230 #1 (1 connection now open)
+04:56:09 web.1   | /home/colin/code/reddi-4um/lib/python2.6/site-packages/mongoengine/fields.py:744: FutureWarning: ReferenceFields will default to using ObjectId  strings in 0.8, set DBRef=True if this isn't desired
+04:56:09 web.1   |   warnings.warn(msg, FutureWarning)
+04:56:09 web.1   | Traceback (most recent call last):
+04:56:09 web.1   |   File "run.py", line 32, in <module>
+04:56:09 web.1   |     from models import User, Topic, Comment, Tag, all_tags, currentUser
+04:56:09 web.1   |   File "/home/colin/code/reddi-4um/models.py", line 199, in <module>
+04:56:09 web.1   |     signals.post_save.connect(redis_updates_for_user, sender=User)
+04:56:09 web.1   |   File "/home/colin/code/reddi-4um/lib/python2.6/site-packages/mongoengine/signals.py", line 27, in _fail
+04:56:09 web.1   |     raise RuntimeError('signalling support is unavailable '
+04:56:09 web.1   | RuntimeError: signalling support is unavailable because the blinker library is not installed.
+04:56:09 mongo.1 | Fri Jan  4 04:56:09 [conn1] end connection 127.0.0.1:50230 (0 connections now open)
+04:56:09 web.1   | exited with code 1
+04:56:09 system  | sending SIGTERM to all processes
+04:56:09 mongo.1 | Fri Jan  4 04:56:09 got signal 15 (Terminated), will terminate after current cmd ends
+04:56:09 redis.1 | [20281 | signal handler] (1357293369) Received SIGTERM, scheduling shutdown...
+04:56:09 mongo.1 | Fri Jan  4 04:56:09 [interruptThread] now exiting
+04:56:09 mongo.1 | Fri Jan  4 04:56:09 dbexit: 
+04:56:09 mongo.1 | Fri Jan  4 04:56:09 [interruptThread] shutdown: going to close listening sockets...
+04:56:09 mongo.1 | Fri Jan  4 04:56:09 [interruptThread] closing listening socket: 5
+04:56:09 mongo.1 | Fri Jan  4 04:56:09 [interruptThread] closing listening socket: 6
+04:56:09 mongo.1 | Fri Jan  4 04:56:09 [interruptThread] closing listening socket: 7
+04:56:09 mongo.1 | Fri Jan  4 04:56:09 [interruptThread] removing socket file: /tmp/mongodb-27017.sock
+04:56:09 mongo.1 | Fri Jan  4 04:56:09 [interruptThread] shutdown: going to flush diaglog...
+04:56:09 mongo.1 | Fri Jan  4 04:56:09 [interruptThread] shutdown: going to close sockets...
+04:56:09 mongo.1 | Fri Jan  4 04:56:09 [interruptThread] shutdown: waiting for fs preallocator...
+04:56:09 mongo.1 | Fri Jan  4 04:56:09 [interruptThread] shutdown: closing all files...
+04:56:09 mongo.1 | Fri Jan  4 04:56:09 [interruptThread] closeAllFiles() finished
+04:56:09 mongo.1 | Fri Jan  4 04:56:09 [interruptThread] shutdown: removing fs lock...
+04:56:09 mongo.1 | Fri Jan  4 04:56:09 dbexit: really exiting now
+04:56:09 redis.1 | [20281] 04 Jan 04:56:09.242 # User requested shutdown...
+04:56:09 redis.1 | [20281] 04 Jan 04:56:09.242 * Saving the final RDB snapshot before exiting.
+04:56:09 redis.1 | [20281] 04 Jan 04:56:09.245 * DB saved on disk
+04:56:09 redis.1 | [20281] 04 Jan 04:56:09.245 # Redis is now ready to exit, bye bye...
+SIGTERM received
+04:56:09 redis.1 | terminated by SIGTERM
+04:56:09 mongo.1 | terminated by SIGTERM

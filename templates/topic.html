@@ -36,8 +36,8 @@
 <hr>
 
 <ul class="media-list">
-	{% for comment in topic.comments %}
-	<li class="media well well-small comment" id="{% if loop.last %}newest{% endif %}">
+	{% for comment in comments %}
+    <li class="media well well-small comment">
 		<div class="pull-left">
 			<img class="media-object" src="{{ comment.user.email | gravatar }}">
 		</div>
@@ -49,27 +49,8 @@
 	</li>
 	{% endfor %}
 </ul>
-<script>
-	var $comments = $('.comment')
-	if ($comments.length > 1) {
-		$comments.slice(0,-1)
-			.addClass('collapse')
-			.click(function() {
-				if (!this.open) {
-					this.open = true
-					$(this).removeClass('collapse')
-				}
-			})
-			.dblclick(function() {
-				if (this.open) {
-					this.open = false
-					$(this).addClass('collapse')
-				}
-			})
-	}
 
-</script>
-
+{% if not pagination.has_next %}
 <form method="post" action="">
 	<fieldset>
 		<legend>New Comment</legend>
@@ -84,5 +65,9 @@
 		</div>
 	</fieldset>
 </form>
+{% endif %}
+
+{% from '_helpers.html' import render_pagination with context %}
+{{render_pagination(pagination)}}
 
 {% endblock %}
